@@ -44,23 +44,19 @@ class Organization {
   * {string} name
   * {string} description
   * {string} email
-  * {Array<string>} memberNames
+  * {Person[]} members
   */
 
   name: string;
   description: string;
   email: string;
-  memberNames: Array<string>
+  members: Person[]
 
-  constructor(
-    name: string, description: string, email: string, memberNames: Array<string>,
-  ) {
+  constructor(name: string, description: string, email: string, members: Person[]) {
     this.name = name;
     this.description = description;
     this.email = email;
-    if (typeof memberNames !== 'undefined') {
-      // TODO
-    }
+    this.members = members;
   }
 }
 
@@ -70,10 +66,14 @@ class MusicGroup extends Organization {
   * {string} genre
   */
 
+  name: string;
+  description: string;
+  email: string;
+  members: Person[];
   genre: string;
 
-  constructor(genre) {
-    super();
+  constructor(name: string, description: string, email: string, members: Person[], genre: string) {
+    super(name, description, email, members, genre);
     this.genre = genre;
   }
 }
@@ -131,12 +131,12 @@ class Recording {
 class Playlist {
   /**
   * A collection of music tracks in playlist form.
-  * @param {Array<Recording>} tracks
+  * @param {Recording[]} tracks
   */
 
-  tracks: Array<Recording>;
+  tracks: Recording[];
 
-  constructor(tracks: Array<Recording>) {
+  constructor(tracks: Recording[]) {
     this.tracks = tracks;
   }
 }
@@ -155,8 +155,11 @@ class Album extends Playlist {
   releaseType: string;
   artist: Object;
 
-  constructor(productionType: string, release: Release, releaseType: string, artist: Object) {
-    super();
+  constructor(
+    tracks: Recording[], productionType: string, release: Release,
+    releaseType: string, artist: Object,
+  ) {
+    super(tracks, productionType, release, releaseType, artist);
     this.productionType = productionType;
     this.release = release;
     this.releaseType = releaseType;
@@ -181,10 +184,10 @@ class Release extends Playlist {
   releaseOf: Album;
 
   constructor(
-    catalogNumber: string, duration: string, format: string,
+    tracks: Recording[], catalogNumber: string, duration: string, format: string,
     recordLabel: string, releaseOf: Album,
   ) {
-    super();
+    super(tracks, catalogNumber, duration, format, recordLabel, releaseOf);
     this.catalogNumber = catalogNumber;
     this.duration = duration;
     this.format = format;
@@ -208,11 +211,11 @@ class CompositionRight {
   percentageShares: number;
   validFrom: string;
   validThrough: string;
-  territories: Array<string>;
+  territories: string[];
 
   constructor(
     compositionId: string, percentageShares: number, validFrom: string,
-    validThrough: string, territories: Array<string>,
+    validThrough: string, territories: string[],
   ) {
     this.compositionId = compositionId;
     this.percentageShares = percentageShares;
