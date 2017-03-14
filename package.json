@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test nyc --require babel-register mocha --recursive './test/**/*_test.js'",
+    "test": "mocha --recursive './test/**/*_test.js'",
     "build": "mkdirp ./lib && babel --copy-files src -d lib",
     "check": "npm run check:style && npm run check:types",
     "check:style": "standard",
@@ -44,7 +44,8 @@
     "gh-pages": "^0.12.0",
     "ink-docstrap": "^1.3.0",
     "jsdoc": "^3.4.3",
-    "jsdoc-babel": "^0.3.0"
+    "jsdoc-babel": "^0.3.0",
+    "mocha": "^3.2.0"
   },
   "standard": {
     "parser": "babel-eslint",
