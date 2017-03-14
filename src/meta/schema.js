@@ -49,7 +49,10 @@ function newOrganization(
 
 /**
 * A musical group, such as a band, an orchestra, or a choir. Can also be a solo musician.
-* @param {string} genre
+* @param {string} name
+* @param {string} description
+* @param {string} email
+* @param {Object[]} members
 */
 function newMusicGroup(
   name: string, description: string, email: string, members: Object[],
@@ -66,23 +69,23 @@ function newMusicGroup(
 
 /**
 * A composition represents the written music and lyrics of a musical work.
-* @param {string} name
-* @param {string} composerId
-* @param {string} iswc
+* @param {string} name - The name of the item.
+* @param {string} composer - The person or organization who wrote a composition.
+* @param {string} iswcCode - The International Standard Musical Work Code for the composition.
 */
-function newMusicComposition(name: string, composerId: string, iswc: string): Object {
+function newMusicComposition(name: string, composer: string, iswc: string): Object {
   return {
     '@context': SCHEMA,
     '@type': 'MusicComposition',
     name,
-    composerId,
+    composer,
     iswc,
   };
 }
 
 /**
 * A recording represents a recorded performance of a composition.
-* @param {Artist} byArtist - The artist that performed this album or recording.
+* @param {MusicGroup} byArtist - The artist that performed this album or recording.
 * @param {string} duration - The duration of the item in ISO 8601 date format ie 2017-03-08.
 * @param {Album} inAlbum - The album to which this recording belongs.
 * @param {Playlist} inPlaylist - The playlist to which this recording belongs.
@@ -152,11 +155,11 @@ function newMusicPlaylist(tracks): Object {
 * @param {string} productionType - soundtrack, live album, studio album, etc.
 * @param {Release} release - a release of this album
 * @param {string} releaseType - The kind of release which this album is: single, EP or LP
-* @param {Artist} artist - The artist that performed this album or recording.
+* @param {MusicGroup} byArtist - The artist that performed this album or recording.
 */
 function newMusicAlbum(
   tracks: Object[], productionType: string,
-  release: Object, releaseType: string, artist: Object,
+  release: Object, releaseType: string, byArtist: Object,
 ): Object {
   return {
     '@context': SCHEMA,
@@ -165,7 +168,7 @@ function newMusicAlbum(
     productionType,
     release,
     releaseType,
-    artist,
+    byArtist,
   };
 }
 
