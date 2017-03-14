@@ -31,13 +31,12 @@ function newPerson(birthDate: string, familyName: string, givenName: string) {
 * @param {string} name
 * @param {string} description
 * @param {string} email
-* @param {string[]} memberIds
+* @param {Object[]} members
 */
 function newOrganization(
   name: string, description: string, email: string,
-  memberIds: string[],
+  members: Object[],
 ): Object {
-  const members = memberIds.map(m => ({ '@type': 'Person', '@id': m }));
   return {
     '@context': SCHEMA,
     '@type': 'Organization',
@@ -52,8 +51,18 @@ function newOrganization(
 * A musical group, such as a band, an orchestra, or a choir. Can also be a solo musician.
 * @param {string} genre
 */
-function newMusicGroup() {}
-
+function newMusicGroup(
+  name: string, description: string, email: string, members: Object[],
+): Object {
+  return {
+    '@context': SCHEMA,
+    '@type': 'Organization',
+    name,
+    description,
+    email,
+    members,
+  };
+}
 
 /**
 * A composition represents the written music and lyrics of a musical work.
@@ -61,10 +70,10 @@ function newMusicGroup() {}
 * @param {string} composerId
 * @param {string} iswc
 */
-function newComposition(name: string, composerId: string, iswc: string): Object {
+function newMusicComposition(name: string, composerId: string, iswc: string): Object {
   return {
     '@context': SCHEMA,
-    '@type': 'Composition',
+    '@type': 'MusicComposition',
     name,
     composerId,
     iswc,
@@ -79,20 +88,50 @@ function newComposition(name: string, composerId: string, iswc: string): Object 
 * @param {Playlist} inPlaylist - The playlist to which this recording belongs.
 * @param {string} isrc - The International Standard Recording Code for the recording.
 * @param {Composition} composition - The composition this track is a recording of.
+* @param {AudioObject} audio - An audio file.
 */
-function newRecording(
+function newMusicRecording(
   byArtist: Object, duration: string, inAlbum: Object,
-  inPlaylist: Object, isrc: string, composition: Object,
+  inPlaylist: Object, isrc: string, composition: Object, audio: Object,
 ): Object {
   return {
     '@context': SCHEMA,
-    '@type': 'Recording',
+    '@type': 'MusicRecording',
     byArtist,
     duration,
     inAlbum,
     inPlaylist,
     isrc,
     composition,
+    audio,
+  };
+}
+
+/**
+* An audio file.
+* @param {string} contentUrl - Actual bytes of the media object.
+* @param {string} encodingFormat - mp3, wav, flac, etc.
+*/
+function newAudioObject(contentUrl: string, encodingFormat: string): Object {
+  return {
+    '@context': SCHEMA,
+    '@type': 'AudioObject',
+    contentUrl,
+    encodingFormat,
+  };
+}
+
+/**
+* An image file.
+* @param {string} contentUrl - Actual bytes of the media object.
+* @param {string} encodingFormat - jpeg, gif, png, etc.
+*/
+function newImageObject(contentUrl: string, encodingFormat: string): Object {
+  return {
+    '@context': SCHEMA,
+    '@type': 'ImageObject',
+    contentUrl,
+    encodingFormat,
   };
 }
 
@@ -100,10 +139,10 @@ function newRecording(
 * A collection of music tracks in playlist form.
 * @param {Recording[]} tracks
 */
-function newPlaylist(tracks): Object {
+function newMusicPlaylist(tracks): Object {
   return {
     '@context': SCHEMA,
-    '@type': 'Playlist',
+    '@type': 'MusicPlaylist',
     tracks,
   };
 }
@@ -115,13 +154,13 @@ function newPlaylist(tracks): Object {
 * @param {string} releaseType - The kind of release which this album is: single, EP or LP
 * @param {Artist} artist - The artist that performed this album or recording.
 */
-function newAlbum(
-  tracks: Array<Object>, productionType: string,
+function newMusicAlbum(
+  tracks: Object[], productionType: string,
   release: Object, releaseType: string, artist: Object,
 ): Object {
   return {
     '@context': SCHEMA,
-    '@type': 'Album',
+    '@type': 'MusicAlbum',
     tracks,
     productionType,
     release,
@@ -130,29 +169,47 @@ function newAlbum(
   };
 }
 
-function newRelease(
-  tracks: Array<Object>, catalogNumber: string, duration: string,
-  format: string, recordLabel: string, releaseOf: Object,
+/**
+* A MusicRelease is a specific release of a music album.
+* @param {Object} tracks - The catalog number for the release.
+* @param {string} catalogNumber - The catalog number for the release.
+* @param {string} duration - The duration of the item in ISO 8601 date format ie 2017-03-08.
+* @param {string} musicReleaseFormat - digital, vinyl, tape, compact disc, etc.
+* @param {Organization} recordLabel - The label that issued the release.
+* @param {Album} releaseOf - The album this is a release of.
+*/
+function newMusicRelease(
+  tracks: Object[], catalogNumber: string, duration: string,
+  musicReleaseFormat: string, recordLabel: Object, releaseOf: Object,
 ): Object {
   return {
     '@context': SCHEMA,
-    '@type': 'Release',
+    '@type': 'MusicRelease',
     tracks,
     catalogNumber,
     duration,
-    format,
+    musicReleaseFormat,
     recordLabel,
     releaseOf,
   };
 }
 
-function newCompositionRight(
+/**
+* A composition right indicates ownership of a composition.
+* The amount in the transaction output specifies the percentage shares.
+* @param {string} compositionId
+* @param {number} percentageShares - percentage of ownership between 0 and 100.
+* @param {string} validFrom
+* @param {string} validThrough
+* @param {string[]} territories - country codes.
+*/
+function newMusicCompositionRight(
   compositionId: string, percentageShares: number, validFrom: string,
   validThrough: string, territories: string[],
 ): Object {
   return {
     '@context': SCHEMA,
-    '@type': 'CompositionRight',
+    '@type': 'MusicCompositionRight',
     compositionId,
     percentageShares,
     validFrom,
@@ -160,17 +217,3 @@ function newCompositionRight(
     territories,
   };
 }
-
-function newUser(name: string, id: string) {
-  return `${name}: ${id}`;
-}
-
-/**
- * Gets the data objects ID
- * @param {Object} data
- * @returns {string} id
- */
-function getId(data) {
-  return data.get('@id');
-}
-
