@@ -2,7 +2,7 @@
   "name": "envokeJS",
   "version": "0.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "mocha --require babel-core/register --recursive './test/**/*_test.js'",
     "build": "mkdirp ./lib && babel --copy-files src -d lib",
