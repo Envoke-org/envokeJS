@@ -12,7 +12,7 @@ const SCHEMA = 'http://schema.org/';
 
 /**
 * A person (alive, dead, undead, or fictional).
-* @param {string} birthDate
+* @param {string} birthDate -  ISO 8601 date format ie 2017-03-01.
 * @param {string} familyName - The last name of an Person.
 * @param {string} givenName - The first name of a Person.
 */
@@ -220,3 +220,8 @@ function newMusicCompositionRight(
     territories,
   };
 }
+
+export {
+  newPerson,
+  newOrganization,
+};
