@@ -150,7 +150,7 @@ function newImageObject(contentUrl: string, encodingFormat: string): Object {
 * @param {Recording[]} tracks
 * @returns {Object}
 */
-function newMusicPlaylist(tracks): Object {
+function newMusicPlaylist(tracks: Array<Object>): Object {
   return {
     '@context': SCHEMA,
     '@type': 'MusicPlaylist',
@@ -160,21 +160,23 @@ function newMusicPlaylist(tracks): Object {
 
 /**
 * A collection of music tracks.
-* @param {string} productionType - soundtrack, live album, studio album, etc.
+* @param {string} name - The name of the item.
+* @param {string} albumProductionType - soundtrack, live album, studio album, etc.
 * @param {Release} release - a release of this album
 * @param {string} releaseType - The kind of release which this album is: single, EP or LP
 * @param {MusicGroup} byArtist - The artist that performed this album or recording.
 * @returns {Object}
 */
 function newMusicAlbum(
-  tracks: Object[], productionType: string,
+  name: string, tracks: Object[], albumProductionType: string,
   release: Object, releaseType: string, byArtist: Object,
 ): Object {
   return {
     '@context': SCHEMA,
     '@type': 'MusicAlbum',
+    name,
     tracks,
-    productionType,
+    albumProductionType,
     release,
     releaseType,
     byArtist,
