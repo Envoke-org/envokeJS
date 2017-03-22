@@ -15,15 +15,17 @@ const SCHEMA = 'http://schema.org/';
 * @param {string} birthDate -  ISO 8601 date format ie 2017-03-01.
 * @param {string} familyName - The last name of an Person.
 * @param {string} givenName - The first name of a Person.
+* @param {ImageObject} image
 * @returns {Object}
 */
-function newPerson(birthDate: string, familyName: string, givenName: string) {
+function newPerson(birthDate: string, familyName: string, givenName: string, image: Object) {
   return {
     '@context': SCHEMA,
     '@type': 'Person',
     birthDate,
     familyName,
     givenName,
+    image,
   };
 }
 
@@ -32,12 +34,13 @@ function newPerson(birthDate: string, familyName: string, givenName: string) {
 * @param {string} name
 * @param {string} description
 * @param {string} email
-* @param {Object[]} members
+* @param {Person[]} members
+* @param {ImageObject} image
 * @returns {Object}
 */
 function newOrganization(
   name: string, description: string, email: string,
-  members: Object[],
+  members: Object[], image: Object,
 ): Object {
   return {
     '@context': SCHEMA,
@@ -46,6 +49,7 @@ function newOrganization(
     description,
     email,
     members,
+    image,
   };
 }
 
@@ -55,10 +59,11 @@ function newOrganization(
 * @param {string} description
 * @param {string} email
 * @param {Object[]} members
+* @param {ImageObject} image
 * @returns {Object}
 */
 function newMusicGroup(
-  name: string, description: string, email: string, members: Object[],
+  name: string, description: string, email: string, members: Object[], image: Object,
 ): Object {
   return {
     '@context': SCHEMA,
@@ -67,13 +72,14 @@ function newMusicGroup(
     description,
     email,
     members,
+    image,
   };
 }
 
 /**
 * A composition represents the written music and lyrics of a musical work.
 * @param {string} name - The name of the item.
-* @param {string} composer - The person or organization who wrote a composition.
+* @param {Person} composer - The person or organization who wrote a composition.
 * @param {string} iswcCode - The International Standard Musical Work Code for the composition.
 * @returns {Object}
 */
@@ -88,30 +94,115 @@ function newMusicComposition(name: string, composer: string, iswc: string): Obje
 }
 
 /**
+* A composition right indicates ownership of a composition.
+* The amount in the transaction output specifies the percentage shares.
+* @param {Composition} composition
+* @param {Person} composer
+* @param {number} percentageShares - percentage of ownership between 0 and 100.
+* @param {string} validFrom
+* @param {string} validThrough
+* @param {string[]} territories - country codes.
+* @returns {Object}
+*/
+function newMusicCompositionRight(
+  composition: Object, composer: Object, percentageShares: number, validFrom: string,
+  validThrough: string, territories: string[],
+): Object {
+  return {
+    '@context': SCHEMA,
+    '@type': 'MusicCompositionRight',
+    composition,
+    composer,
+    percentageShares,
+    validFrom,
+    validThrough,
+    territories,
+  };
+}
+
+/**
 * A recording represents a recorded performance of a composition.
 * @param {MusicGroup} byArtist - The artist that performed this album or recording.
 * @param {string} duration - The duration of the item in ISO 8601 date format ie 2017-03-08.
-* @param {Album} inAlbum - The album to which this recording belongs.
-* @param {Playlist} inPlaylist - The playlist to which this recording belongs.
 * @param {string} isrc - The International Standard Recording Code for the recording.
 * @param {Composition} composition - The composition this track is a recording of.
 * @param {AudioObject} audio - An audio file.
 * @returns {Object}
 */
 function newMusicRecording(
-  byArtist: Object, duration: string, inAlbum: Object,
-  inPlaylist: Object, isrc: string, composition: Object, audio: Object,
+  name: string, composition: Object, byArtist: Object,
+  duration: string, isrc: string, audio: Object,
 ): Object {
   return {
     '@context': SCHEMA,
     '@type': 'MusicRecording',
+    name,
+    composition,
     byArtist,
     duration,
-    inAlbum,
-    inPlaylist,
     isrc,
-    composition,
     audio,
+  };
+}
+
+/**
+* A collection of music tracks in playlist form.
+* @param {Recording[]} tracks
+* @returns {Object}
+*/
+function newMusicPlaylist(tracks: Object[]): Object {
+  return {
+    '@context': SCHEMA,
+    '@type': 'MusicPlaylist',
+    tracks,
+  };
+}
+
+/**
+* A collection of music tracks.
+* @param {string} name - The name of the item.
+* @param {Recording[]} tracks
+* @param {string} albumProductionType - soundtrack, live album, studio album, etc.
+* @param {string} releaseType - The kind of release which this album is: single, EP or LP
+* @param {MusicGroup} byArtist - The artist that performed this album or recording.
+* @returns {Object}
+*/
+function newMusicAlbum(
+  name: string, tracks: Object[], albumProductionType: string,
+  releaseType: string, byArtist: Object,
+): Object {
+  return {
+    '@context': SCHEMA,
+    '@type': 'MusicAlbum',
+    name,
+    tracks,
+    albumProductionType,
+    releaseType,
+    byArtist,
+  };
+}
+
+/**
+* A MusicRelease is a specific release of a music album.
+* @param {string} catalogNumber - The catalog number for the release.
+* @param {string} duration - The duration of the item in ISO 8601 date format ie 2017-03-08.
+* @param {string} musicReleaseFormat - digital, vinyl, tape, compact disc, etc.
+* @param {Organization} recordLabel - The label that issued the release.
+* @param {Album} releaseOf - The album this is a release of.
+* @returns {Object}
+*/
+function newMusicRelease(
+  catalogNumber: string, duration: string,
+  musicReleaseFormat: string, recordLabel: Object, releaseOf: Object,
+): Object {
+  return {
+    '@context': SCHEMA,
+    '@type': 'MusicRelease',
+    catalogNumber,
+    duration,
+    musicReleaseFormat,
+    recordLabel,
+    releaseOf,
   };
 }
 
@@ -142,95 +233,6 @@ function newImageObject(contentUrl: string, encodingFormat: string): Object {
     '@type': 'ImageObject',
     contentUrl,
     encodingFormat,
-  };
-}
-
-/**
-* A collection of music tracks in playlist form.
-* @param {Recording[]} tracks
-* @returns {Object}
-*/
-function newMusicPlaylist(tracks: Array<Object>): Object {
-  return {
-    '@context': SCHEMA,
-    '@type': 'MusicPlaylist',
-    tracks,
-  };
-}
-
-/**
-* A collection of music tracks.
-* @param {string} name - The name of the item.
-* @param {string} albumProductionType - soundtrack, live album, studio album, etc.
-* @param {Release} release - a release of this album
-* @param {string} releaseType - The kind of release which this album is: single, EP or LP
-* @param {MusicGroup} byArtist - The artist that performed this album or recording.
-* @returns {Object}
-*/
-function newMusicAlbum(
-  name: string, tracks: Object[], albumProductionType: string,
-  release: Object, releaseType: string, byArtist: Object,
-): Object {
-  return {
-    '@context': SCHEMA,
-    '@type': 'MusicAlbum',
-    name,
-    tracks,
-    albumProductionType,
-    release,
-    releaseType,
-    byArtist,
-  };
-}
-
-/**
-* A MusicRelease is a specific release of a music album.
-* @param {Object} tracks - The catalog number for the release.
-* @param {string} catalogNumber - The catalog number for the release.
-* @param {string} duration - The duration of the item in ISO 8601 date format ie 2017-03-08.
-* @param {string} musicReleaseFormat - digital, vinyl, tape, compact disc, etc.
-* @param {Organization} recordLabel - The label that issued the release.
-* @param {Album} releaseOf - The album this is a release of.
-* @returns {Object}
-*/
-function newMusicRelease(
-  tracks: Object[], catalogNumber: string, duration: string,
-  musicReleaseFormat: string, recordLabel: Object, releaseOf: Object,
-): Object {
-  return {
-    '@context': SCHEMA,
-    '@type': 'MusicRelease',
-    tracks,
-    catalogNumber,
-    duration,
-    musicReleaseFormat,
-    recordLabel,
-    releaseOf,
-  };
-}
-
-/**
-* A composition right indicates ownership of a composition.
-* The amount in the transaction output specifies the percentage shares.
-* @param {string} compositionId
-* @param {number} percentageShares - percentage of ownership between 0 and 100.
-* @param {string} validFrom
-* @param {string} validThrough
-* @param {string[]} territories - country codes.
-* @returns {Object}
-*/
-function newMusicCompositionRight(
-  compositionId: string, percentageShares: number, validFrom: string,
-  validThrough: string, territories: string[],
-): Object {
-  return {
-    '@context': SCHEMA,
-    '@type': 'MusicCompositionRight',
-    compositionId,
-    percentageShares,
-    validFrom,
-    validThrough,
-    territories,
   };
 }
 
