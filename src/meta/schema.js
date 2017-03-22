@@ -127,11 +127,12 @@ function newMusicCompositionRight(
 * @param {string} isrc - The International Standard Recording Code for the recording.
 * @param {Composition} composition - The composition this track is a recording of.
 * @param {AudioObject} audio - An audio file.
+* @param {ImageObject} image
 * @returns {Object}
 */
 function newMusicRecording(
   name: string, composition: Object, byArtist: Object,
-  duration: string, isrc: string, audio: Object,
+  duration: string, isrc: string, audio: Object, image: Object,
 ): Object {
   return {
     '@context': SCHEMA,
@@ -142,19 +143,22 @@ function newMusicRecording(
     duration,
     isrc,
     audio,
+    image,
   };
 }
 
 /**
 * A collection of music tracks in playlist form.
 * @param {Recording[]} tracks
+* @param {ImageObject} image
 * @returns {Object}
 */
-function newMusicPlaylist(tracks: Object[]): Object {
+function newMusicPlaylist(tracks: Object[], image: Object): Object {
   return {
     '@context': SCHEMA,
     '@type': 'MusicPlaylist',
     tracks,
+    image,
   };
 }
 
@@ -165,11 +169,12 @@ function newMusicPlaylist(tracks: Object[]): Object {
 * @param {string} albumProductionType - soundtrack, live album, studio album, etc.
 * @param {string} releaseType - The kind of release which this album is: single, EP or LP
 * @param {MusicGroup} byArtist - The artist that performed this album or recording.
+* @param {ImageObject} image
 * @returns {Object}
 */
 function newMusicAlbum(
   name: string, tracks: Object[], albumProductionType: string,
-  releaseType: string, byArtist: Object,
+  releaseType: string, byArtist: Object, image: Object,
 ): Object {
   return {
     '@context': SCHEMA,
@@ -179,6 +184,7 @@ function newMusicAlbum(
     albumProductionType,
     releaseType,
     byArtist,
+    image,
   };
 }
 
@@ -189,11 +195,12 @@ function newMusicAlbum(
 * @param {string} musicReleaseFormat - digital, vinyl, tape, compact disc, etc.
 * @param {Organization} recordLabel - The label that issued the release.
 * @param {Album} releaseOf - The album this is a release of.
+* @param {ImageObject} image
 * @returns {Object}
 */
 function newMusicRelease(
   catalogNumber: string, duration: string,
-  musicReleaseFormat: string, recordLabel: Object, releaseOf: Object,
+  musicReleaseFormat: string, recordLabel: Object, releaseOf: Object, image: Object,
 ): Object {
   return {
     '@context': SCHEMA,
@@ -203,6 +210,7 @@ function newMusicRelease(
     musicReleaseFormat,
     recordLabel,
     releaseOf,
+    image,
   };
 }
 
