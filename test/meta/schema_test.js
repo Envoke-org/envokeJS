@@ -8,7 +8,7 @@ import { newPerson } from '../../src/meta/schema';
 const SCHEMA = 'http://schema.org/';
 
 describe('Person', () => {
-  const person = newPerson('2017-06-19', 'Attar', 'Alexander');
+  const person = newPerson('2017-06-19', 'Attar', 'Alexander', undefined);
   it('validates a correctly formatted person', () => {
     assert.deepEqual(
       person, {
@@ -17,6 +17,7 @@ describe('Person', () => {
         birthDate: '2017-06-19',
         familyName: 'Attar',
         givenName: 'Alexander',
+        image: undefined,
       },
       'schema should validate a correct object');
   });
