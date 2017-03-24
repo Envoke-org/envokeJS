@@ -1,0 +1,18 @@
+{
+  "collections": {
+    "comments": [
+      {
+        "user": "Peter Parker",
+        "text": "I like ice cream."
+      },
+      {
+        "user": "John Doe",
+        "text": "Nodejs is the best."
+      },
+      {
+        "user": "Peter Jones",
+        "text": "Keep your keyboard clean."
+      }
+    ]
+  }
+}
