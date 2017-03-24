@@ -3,7 +3,6 @@ import { expect, assert } from 'chai'
 import { describe, it, before, beforeEach } from 'mocha';
 import should from 'should';
 import fixtures from '../fixtures/model-comments';
-import * as Comment from '../../src/models/comments';
 import * as database from '../../src/db/db';
 
 describe('Model Comment Tests', () => {
