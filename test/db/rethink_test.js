@@ -1,49 +1,62 @@
-import { expect } from 'chai'
+import { expect, assert } from 'chai'
 import { describe, it } from 'mocha';
-import r from 'rethinkdb';
+const r = require('rethinkdbdash')();
+
+import { newPerson } from '../../src/meta/schema';
+
+const SCHEMA = 'http://schema.org/';
 
 describe('RethinkDB', () => {
-  it('connects to the database', () => {
-    r.connect({ host: 'localhost', port: 28015 }, (err) => {
-      if (err) throw err;
-    });
-  });
-
-  it('creates a table', () => {
-    r.connect({ host: 'localhost', port: 28015 }, (_, conn) => {
-      r.db('test').tableCreate('person').run(conn, (err, result) => {
-        if (err) throw err;
-      });
-    });
-  });
-
-  it('inserts data', () => {
-    r.connect({ host: 'localhost', port: 28015 }, (_, conn) => {
-      r.table('person').insert([
-        { name: 'William Adama' },
-        { name: 'Laura Roslin' },
-        { name: 'Jean-Luc Picard' },
-      ]).run(conn, (err) => {
-        if (err) throw err;
-      });
-    });
-  });
-
-  it('gets data', async function(done) {
-    var results = null;
-    try {
-      r.connect({ host: 'localhost', port: 28015 }, (_, conn) => {
-        r.table('person').run(conn).then().then((results) => {
-          console.log(results);
-          return (results);
-        }).catch((err) => {
-          console.log(err);
-        });
-      });
-      expect(results).to.equal([{ name: 'William Adama' }, { sname: 'Jean-Luc Picard' }, { name: 'Laura Roslin' }]);
+  it('drops the database', (done) => {
+    r.dbDrop('test').run().then(() => {
       done();
-    } catch (err) {
-      done(err);
-    }
+    })
+    .error((err) => {
+      if (err) done(err);
+    });
+  });
+
+  it('creates the database', (done) => {
+    r.dbCreate('test').run().then(() => {
+      done();
+    })
+    .error((err) => {
+      if (err) done(err);
+    });
+  });
+
+  it('creates a table', (done) => {
+    r.db('test').tableCreate('person').run().then(() => {
+      done();
+    })
+    .error((err) => {
+      if (err) done(err);
+    });
+  });
+
+  it('inserts data', (done) => {
+    r.table('person').insert([
+      { name: 'William Adama' },
+      { name: 'Laura Roslin' },
+      { name: 'Jean-Luc Picard' },
+    ]).run().then(() => {
+      done();
+    })
+    .error((err) => {
+      if (err) done(err);
+    });
+  });
+
+  it('gets data', (done) => {
+    r.table('person').pluck('name').run().then((results) => {
+      expect(results).to.have.lengthOf(3);
+      done();
+    });
+  });
+
+  it('deletes a table', (done) => {
+    r.db('test').tableDrop('person').run().then(() => {
+      done();
+    });
   });
 });
