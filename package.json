@@ -31,7 +31,6 @@
   },
   "homepage": "",
   "dependencies": {
-    "async": "^2.1.5",
     "mongodb": "^2.2.25"
   },
   "devDependencies": {
