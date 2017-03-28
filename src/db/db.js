@@ -40,8 +40,8 @@ export async function fixtures(data) {
   const names = Object.keys(data.collections);
   for (const name of names) {
     try {
-      let collection = await db.createCollection(name);
-      let test = await collection.insert(data.collections[name]);
+      const collection = await db.createCollection(name);
+      const test = await collection.insert(data.collections[name]);
     } catch (error) {
       console.log(error);
     }

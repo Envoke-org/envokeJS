@@ -67,7 +67,7 @@ function newMusicGroup(
 ): Object {
   return {
     '@context': SCHEMA,
-    '@type': 'Organization',
+    '@type': 'MusicGroup',
     name,
     description,
     email,
