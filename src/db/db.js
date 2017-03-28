@@ -9,7 +9,11 @@ const TEST_DATABASE = 'mongodb://localhost:27017/test';
 export const TESTING = true;
 
 export async function connect(url = TEST_DATABASE) {
-  state.db = await MongoClient.connect(url);
+  try {
+    state.db = await MongoClient.connect(url);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export function getDB() {
@@ -17,9 +21,13 @@ export function getDB() {
 }
 
 export async function drop() {
-  const collections = await state.db.collections();
-  for (const collection of collections) {
-    collection.remove();
+  try {
+    const collections = await state.db.collections();
+    for (const collection of collections) {
+      collection.remove();
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -31,7 +39,11 @@ export async function fixtures(data) {
 
   const names = Object.keys(data.collections);
   for (const name of names) {
-    let collection = await db.createCollection(name);
-    let test = await collection.insert(data.collections[name]);
+    try {
+      let collection = await db.createCollection(name);
+      let test = await collection.insert(data.collections[name]);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
