@@ -41,7 +41,7 @@ export async function fixtures(data) {
   for (const name of names) {
     try {
       const collection = await db.createCollection(name);
-      const test = await collection.insert(data.collections[name]);
+      await collection.insert(data.collections[name]);
     } catch (error) {
       console.log(error);
     }

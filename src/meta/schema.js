@@ -153,10 +153,11 @@ function newMusicRecording(
 * @param {ImageObject} image
 * @returns {Object}
 */
-function newMusicPlaylist(tracks: Object[], image: Object): Object {
+function newMusicPlaylist(name: string, tracks: Object[], image: Object): Object {
   return {
     '@context': SCHEMA,
     '@type': 'MusicPlaylist',
+    name,
     tracks,
     image,
   };
@@ -169,12 +170,13 @@ function newMusicPlaylist(tracks: Object[], image: Object): Object {
 * @param {string} albumProductionType - soundtrack, live album, studio album, etc.
 * @param {string} releaseType - The kind of release which this album is: single, EP or LP
 * @param {MusicGroup} byArtist - The artist that performed this album or recording.
+* @param {MusicRelease[]} releases - Releases of this album.
 * @param {ImageObject} image
 * @returns {Object}
 */
 function newMusicAlbum(
   name: string, tracks: Object[], albumProductionType: string,
-  releaseType: string, byArtist: Object, image: Object,
+  releaseType: string, byArtist: Object, releases: Object[], image: Object,
 ): Object {
   return {
     '@context': SCHEMA,
@@ -184,6 +186,7 @@ function newMusicAlbum(
     albumProductionType,
     releaseType,
     byArtist,
+    releases,
     image,
   };
 }
@@ -191,25 +194,21 @@ function newMusicAlbum(
 /**
 * A MusicRelease is a specific release of a music album.
 * @param {string} catalogNumber - The catalog number for the release.
-* @param {string} duration - The duration of the item in ISO 8601 date format ie 2017-03-08.
 * @param {string} musicReleaseFormat - digital, vinyl, tape, compact disc, etc.
 * @param {Organization} recordLabel - The label that issued the release.
-* @param {Album} releaseOf - The album this is a release of.
 * @param {ImageObject} image
 * @returns {Object}
 */
 function newMusicRelease(
-  catalogNumber: string, duration: string,
-  musicReleaseFormat: string, recordLabel: Object, releaseOf: Object, image: Object,
+  catalogNumber: string, musicReleaseFormat: string,
+  recordLabel: Object, image: Object,
 ): Object {
   return {
     '@context': SCHEMA,
     '@type': 'MusicRelease',
     catalogNumber,
-    duration,
     musicReleaseFormat,
     recordLabel,
-    releaseOf,
     image,
   };
 }

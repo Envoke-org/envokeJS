@@ -11,7 +11,9 @@ import {
 // const COALA = '<coalaip placeholder>';
 const SCHEMA = 'http://schema.org/';
 
-const person = newPerson('2017-06-19', 'Attar', 'Alexander', undefined);
+const person = newPerson(
+  '2017-06-19', 'Xavier', 'Ramona', 'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
+);
 const organization = newOrganization(
   'RVNG Intl.',
   'Brooklyn-based music institution that operates on few but heavily ' +
@@ -19,18 +21,33 @@ const organization = newOrganization(
   'getradder@igetrvng.com',
 );
 const musicGroup = newMusicGroup(
-  'Laserdisc Visions',
+  'Sacred Tapestry',
   'Ramona Andra Xavier is an American electronic musician from Portland, Oregon.',
   'vektroid@music.com',
+  [person],
+  'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
 );
-const musicComposition = newMusicComposition('ドリーミー', person, 'T-034.524.680-1');
+let musicComposition = newMusicComposition('ドリーミー', person, 'T-034.524.680-1');
 const musicCompositionRight = newMusicCompositionRight(
   musicComposition, person, 100, '2016-01-01', '2017-01-01', ['US'],
 );
-
 const musicRecording = newMusicRecording('ドリーミー', musicComposition, musicGroup, 'PT5M', 'US-S1Z-99-0000');
 const imageObject = newImageObject('http://ipfs.io/ipfs/QmcSFW35JqBdYh6uTqHhKuV9Stv8ayeKGoH9HRxEyi3Eh3', 'jpeg');
 const audioObject = newImageObject('http://ipfs.io/ipfs/QmcSFW35JqBdYh6uTqHhKuV9Stv8ayeKGoH9HRxEyi3Eh3', 'mp3');
+
+const shaderUrl = 'https://ipfs.io/ipfs/Qmf39ZCCojdTkwaPcddUZQ9F2VYRfpkwQiKqFoC3mpCxjA';
+const shaderTitles = [
+  'Skyfall IV (Strike Suit)', 'LDVHD Terminus', 'ROGO', 'ドリーミー',
+  'Transmigration', 'Cosmorama', 'Microsleep 2012', 'Spirited Child', 'Hushedcasket ',
+];
+
+const playlist = [];
+for (const i of shaderTitles) {
+  const c = newMusicComposition(i, person, `T-034.524.680-${Math.floor(Math.random() * 9) + 1}`);
+  playlist.push(newMusicRecording(
+    i, c, musicGroup, 'PT5M', `US-S1Z-99-00${Math.floor(Math.random() * 99) + 1}`),
+  );
+}
 
 describe('Schema', () => {
   it('validates a correctly formatted person', () => {
@@ -39,9 +56,9 @@ describe('Schema', () => {
         '@context': SCHEMA,
         '@type': 'Person',
         birthDate: '2017-06-19',
-        familyName: 'Attar',
-        givenName: 'Alexander',
-        image: undefined,
+        familyName: 'Xavier',
+        givenName: 'Ramona',
+        image: 'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
       },
       'schema should validate a correct object',
     );
@@ -68,11 +85,20 @@ describe('Schema', () => {
       musicGroup, {
         '@context': SCHEMA,
         '@type': 'MusicGroup',
-        name: 'Laserdisc Visions',
+        name: 'Sacred Tapestry',
         description: 'Ramona Andra Xavier is an American electronic musician from Portland, Oregon.',
         email: 'vektroid@music.com',
-        members: undefined,
-        image: undefined,
+        members: [
+          {
+            '@context': 'http://schema.org/',
+            '@type': 'Person',
+            birthDate: '2017-06-19',
+            familyName: 'Xavier',
+            givenName: 'Ramona',
+            image: 'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
+          },
+        ],
+        image: 'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
       },
       'schema should validate a correct object',
     );
@@ -87,9 +113,9 @@ describe('Schema', () => {
           '@context': SCHEMA,
           '@type': 'Person',
           birthDate: '2017-06-19',
-          familyName: 'Attar',
-          givenName: 'Alexander',
-          image: undefined,
+          familyName: 'Xavier',
+          givenName: 'Ramona',
+          image: 'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
         },
         name: 'ドリーミー',
         iswc: 'T-034.524.680-1',
@@ -110,9 +136,9 @@ describe('Schema', () => {
             '@context': SCHEMA,
             '@type': 'Person',
             birthDate: '2017-06-19',
-            familyName: 'Attar',
-            givenName: 'Alexander',
-            image: undefined,
+            familyName: 'Xavier',
+            givenName: 'Ramona',
+            image: 'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
           },
           name: 'ドリーミー',
           iswc: 'T-034.524.680-1',
@@ -121,9 +147,9 @@ describe('Schema', () => {
           '@context': SCHEMA,
           '@type': 'Person',
           birthDate: '2017-06-19',
-          familyName: 'Attar',
-          givenName: 'Alexander',
-          image: undefined,
+          familyName: 'Xavier',
+          givenName: 'Ramona',
+          image: 'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
         },
         percentageShares: 100,
         territories: [
@@ -144,11 +170,20 @@ describe('Schema', () => {
         byArtist: {
           '@context': 'http://schema.org/',
           '@type': 'MusicGroup',
-          name: 'Laserdisc Visions',
+          name: 'Sacred Tapestry',
           description: 'Ramona Andra Xavier is an American electronic musician from Portland, Oregon.',
           email: 'vektroid@music.com',
-          members: undefined,
-          image: undefined,
+          members: [
+            {
+              '@context': 'http://schema.org/',
+              '@type': 'Person',
+              birthDate: '2017-06-19',
+              familyName: 'Xavier',
+              givenName: 'Ramona',
+              image: 'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
+            },
+          ],
+          image: 'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
         },
         duration: 'PT5M',
         isrc: 'US-S1Z-99-0000',
@@ -161,9 +196,9 @@ describe('Schema', () => {
             '@context': SCHEMA,
             '@type': 'Person',
             birthDate: '2017-06-19',
-            familyName: 'Attar',
-            givenName: 'Alexander',
-            image: undefined,
+            familyName: 'Xavier',
+            givenName: 'Ramona',
+            image: 'https://ipfs.io/ipfs/QmdhTuX4V4uAUKotFTFpeHDEkSDvWVGfsvqT5EwtmtnPUW',
           },
           name: 'ドリーミー',
           iswc: 'T-034.524.680-1',
