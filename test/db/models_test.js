@@ -1,8 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-shadow */
-import { expect, assert } from 'chai';
+import { expect } from 'chai';
 import { describe, it, before, beforeEach, after } from 'mocha';
-import fixtures from '../fixtures/test';
 import * as database from '../../src/db/db';
 
 import {
@@ -71,9 +70,7 @@ describe('Models', () => {
 
   beforeEach((done) => {
     database.drop().then(() => {
-      database.fixtures(fixtures).then(() => {
-        done();
-      });
+      done();
     });
   });
 
