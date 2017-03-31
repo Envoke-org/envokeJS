@@ -1,2 +1,2 @@
-export * from './meta/schema';
-export * from './db/db';
+export var schema = require('./meta/schema');
+export var db = require('./db/db');
