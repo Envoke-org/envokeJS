@@ -161,21 +161,6 @@ describe('Models', () => {
     });
   });
 
-  it('creates a music recording', (done) => {
-    const db = database.getDB();
-    db.collection('musicrecordings').insert(musicRecording, (error, result) => {
-      db.collection('musicrecordings').find().toArray((error, collection) => {
-        expect(collection).to.have.lengthOf(1);
-        expect(collection[0]._id.toString()).to.equal(result.ops[0]._id.toString());
-        expect(collection[0].name).to.equal('ドリーミー');
-        expect(collection[0].isrc).to.equal('US-S1Z-99-0000');
-        expect(collection[0].byArtist).to.deep.equal(musicGroup);
-        expect(collection[0].composition).to.deep.equal(musicComposition);
-        return done();
-      });
-    });
-  });
-
   it('creates a music playlist', (done) => {
     const db = database.getDB();
     db.collection('musicplaylist').insert(musicPlaylist, (error, result) => {
