@@ -31,6 +31,10 @@ export async function drop() {
   }
 }
 
+export function close() {
+  state.db.close();
+}
+
 export async function fixtures(data) {
   const db = state.db;
   if (!db) {
