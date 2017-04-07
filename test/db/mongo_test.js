@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 import { describe, it, before, beforeEach, after } from 'mocha';
 import fixtures from '../fixtures/test';
-import * as database from '../../src/db/db';
+import * as database from '../../src/database/database';
 
 describe('MongoDB', () => {
   before((done) => {

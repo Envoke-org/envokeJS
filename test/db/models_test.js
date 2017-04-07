@@ -2,7 +2,7 @@
 /* eslint-disable no-shadow */
 import { expect } from 'chai';
 import { describe, it, before, beforeEach, after } from 'mocha';
-import * as database from '../../src/db/db';
+import * as database from '../../src/database/database';
 
 import {
   newPerson, newOrganization, newMusicGroup,

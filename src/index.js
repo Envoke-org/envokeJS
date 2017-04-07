@@ -1,2 +1,2 @@
 export var schema = require('./meta/schema');
-export var db = require('./db/db');
+export var database = require('./database/database');
